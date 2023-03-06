@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input, Card, Row, Col } from 'antd';
-import { useModel, history } from "umi";
+import { useModel, history } from 'umi';
 
+import { login } from '@/api/login';
 
 /**
  * 登录逻辑
@@ -17,20 +18,24 @@ const App: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const userData = {
-    username: "admin",
-    password: "111111",
+    username: 'admin',
+    password: '111111',
     remember: false,
-  }
+  };
 
   const onFinish = async (values: any) => {
     // 修改状态 这个函数是异步执行的 需要
+    let res = await login({
+      data: values,
+    });
+    console.log(res);
     await setInitialState({
       isLogin: true,
-      userInfo: values
-    })
+      userInfo: values,
+    });
     // 2.跳转登录页
-    console.log("111")
-    history.push("/")
+    // console.log("111")
+    // history.push("/")
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -38,7 +43,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <Row align="middle" style={{height: "100vh", background: "#f1f2f6"}}>
+    <Row align="middle" style={{ height: '100vh', background: '#f1f2f6' }}>
       <Col span={8} offset={8}>
         <Card title="登录" extra={<a href="#">注册</a>}>
           <Form
@@ -54,7 +59,9 @@ const App: React.FC = () => {
             <Form.Item
               label="Username"
               name="username"
-              rules={[{ required: true, message: 'Please input your username!' }]}
+              rules={[
+                { required: true, message: 'Please input your username!' },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -62,12 +69,18 @@ const App: React.FC = () => {
             <Form.Item
               label="Password"
               name="password"
-              rules={[{ required: true, message: 'Please input your password!' }]}
+              rules={[
+                { required: true, message: 'Please input your password!' },
+              ]}
             >
               <Input.Password />
             </Form.Item>
 
-            <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 6, span: 18 }}>
+            <Form.Item
+              name="remember"
+              valuePropName="checked"
+              wrapperCol={{ offset: 6, span: 18 }}
+            >
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
 
@@ -80,7 +93,7 @@ const App: React.FC = () => {
         </Card>
       </Col>
     </Row>
-  )
+  );
 };
 
 export default App;

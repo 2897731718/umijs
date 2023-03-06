@@ -1,4 +1,15 @@
 export default [
-  { path: '/login', component: '@/pages/login', name: "登录", layout: false },
-  { path: '/', component: '@/pages/index', name: "首页" },
-]
+  { path: '/login', component: '@/pages/login', layout: false },
+  { path: '/', redirect: 'index' },
+  {
+    path: '/',
+    component: '@/pages/index',
+    name: '首页',
+    routes: [
+      {
+        path: '/user/list',
+        component: '@/pages/users/list',
+      },
+    ],
+  },
+];
