@@ -1,5 +1,8 @@
 // 这个文件中 做项目得运行时配置
 import { history } from 'umi';
+import { BasicLayoutProps } from '@ant-design/pro-layout';
+
+import HeaderDropMenu from '@/components/HeaderDropMenu/index';
 // import { RequestConfig } from 'umi';
 
 // export const request: RequestConfig = {
@@ -26,11 +29,12 @@ import { history } from 'umi';
 // };
 
 export async function getInitialState() {
+  let info =
+    localStorage.getItem('userInfo') || sessionStorage.getItem('userInfo');
   let userState = {
-    isLogin: false,
-    userInfo: null,
+    isLogin: info ? true : false,
+    userInfo: info ? JSON.parse(info) : null,
   };
-  // console.log("user", userState)
   return userState;
 }
 
@@ -39,7 +43,7 @@ export const layout = ({
   initialState,
 }: {
   initialState: { isLogin: boolean };
-}) => {
+}): BasicLayoutProps => {
   return {
     onPageChange: () => {
       // 此处可以根据用户得登录状态，引导用户到指定得路由访问
@@ -48,6 +52,9 @@ export const layout = ({
       if (!isLogin) {
         history.push('/login');
       }
+    },
+    rightContentRender: () => {
+      return <HeaderDropMenu></HeaderDropMenu>;
     },
   };
 };

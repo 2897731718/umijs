@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, Form, Input, Card, Row, Col } from 'antd';
+import { Button, Checkbox, Form, Input, Card, Row, Col, message } from 'antd';
 import { useModel, history } from 'umi';
 
 import { login } from '@/api/login';
@@ -16,6 +16,7 @@ import { login } from '@/api/login';
 
 const App: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
+  const [messageApi, contextHolder] = message.useMessage();
 
   const userData = {
     username: 'admin',
@@ -28,14 +29,20 @@ const App: React.FC = () => {
     let res = await login({
       data: values,
     });
-    console.log(res);
-    await setInitialState({
-      isLogin: true,
-      userInfo: values,
-    });
-    // 2.跳转登录页
-    // console.log("111")
-    // history.push("/")
+    if (res.code === '200') {
+      values.remember &&
+        localStorage.setItem('userInfo', JSON.stringify(values));
+      !values.remember &&
+        sessionStorage.setItem('userInfo', JSON.stringify(values));
+      await setInitialState({
+        isLogin: true,
+        userInfo: values,
+      });
+      // 2.跳转登录页
+      history.push('/');
+    } else {
+      messageApi.error('登录失败');
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
