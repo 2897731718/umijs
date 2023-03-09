@@ -4,11 +4,36 @@ export default [
   {
     name: '首页',
     path: '/',
-    component: '@/pages/index',
+    component: '@/pages/home/browsing',
+    icon: 'AreaChartOutlined',
   },
   {
-    name: '用户',
+    name: '数据统计',
+    path: '/',
+    component: '@/pages/statistics',
+    icon: 'AreaChartOutlined',
+  },
+  {
+    name: '我的申请',
+    path: '/apply',
+    icon: 'AreaChartOutlined',
+    routes: [
+      {
+        name: '申请录入',
+        path: '/apply/add',
+        component: '@/pages/apply/list',
+      },
+      {
+        name: '申请列表',
+        path: '/apply/list',
+        component: '@/pages/apply/list',
+      },
+    ],
+  },
+  {
+    name: '用户管理',
     path: '/users',
+    icon: 'AreaChartOutlined',
     routes: [
       {
         name: '用户列表',
@@ -18,8 +43,9 @@ export default [
     ],
   },
   {
-    name: '审核',
+    name: '审核管理',
     path: '/examine',
+    icon: 'AreaChartOutlined',
     routes: [
       {
         name: '审核列表',
@@ -30,6 +56,23 @@ export default [
         name: '添加审核',
         path: '/examine/add',
         component: '@/pages/examine/list',
+      },
+    ],
+  },
+  {
+    name: '信息管理',
+    path: '/information',
+    icon: 'AreaChartOutlined',
+    routes: [
+      {
+        name: '信息列表',
+        path: '/information/list',
+        component: '@/pages/information/list',
+      },
+      {
+        name: '信息添加',
+        path: '/information/add',
+        component: '@/pages/information/list',
       },
     ],
   },

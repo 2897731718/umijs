@@ -29,17 +29,21 @@ const App: React.FC = () => {
     let res = await login({
       data: values,
     });
+    let userInfo = {
+      ...values,
+      ...res.data,
+    };
     if (res.code === '200') {
       values.remember &&
-        localStorage.setItem('userInfo', JSON.stringify(values));
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
       !values.remember &&
-        sessionStorage.setItem('userInfo', JSON.stringify(values));
+        sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
       await setInitialState({
         isLogin: true,
-        userInfo: values,
+        userInfo,
       });
       // 2.跳转登录页
-      history.push('/');
+      history.replace('/');
     } else {
       messageApi.error('登录失败');
     }

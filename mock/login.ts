@@ -24,19 +24,118 @@ export default {
       res.send({
         success: true,
         code: '200',
-        data: [{ id: '100' }],
+        data: { userId: 'admin' },
       });
     } else if (username === 'user' && password === '111111') {
       res.send({
         success: true,
         code: '200',
-        data: [{ id: '100' }],
+        data: { userId: 'user' },
       });
     } else {
       res.send({
         success: true,
         errorCode: '401',
         errorMessage: '登录失败',
+      });
+    }
+  },
+  'POST /app/menu': (req: any, res: any) => {
+    const { userId } = req.body;
+    if (userId === 'user') {
+      res.send({
+        success: true,
+        code: '200',
+        data: [
+          {
+            name: '首页',
+            path: '/',
+            component: '@/pages/home/browsing',
+            // icon: "AreaChartOutlined",
+          },
+        ],
+      });
+    } else if (userId === 'admin') {
+      res.send({
+        success: true,
+        code: '200',
+        data: [
+          {
+            name: '数据统计',
+            path: '/',
+            component: '@/pages/statistics',
+            // icon: "AreaChartOutlined",
+          },
+          {
+            name: '我的申请',
+            path: '/apply',
+            // icon: "AreaChartOutlined",
+            routes: [
+              {
+                name: '申请录入',
+                path: '/apply/add',
+                component: '@/pages/apply/list',
+              },
+              {
+                name: '申请列表',
+                path: '/apply/list',
+                component: '@/pages/apply/list',
+              },
+            ],
+          },
+          {
+            name: '用户管理',
+            path: '/users',
+            // icon: "AreaChartOutlined",
+            routes: [
+              {
+                name: '用户列表',
+                path: '/users/list',
+                component: '@/pages/users/list',
+              },
+            ],
+          },
+          {
+            name: '审核管理',
+            path: '/examine',
+            // icon: "AreaChartOutlined",
+            routes: [
+              {
+                name: '审核列表',
+                path: '/examine/list',
+                component: '@/pages/examine/list',
+              },
+              {
+                name: '添加审核',
+                path: '/examine/add',
+                component: '@/pages/examine/list',
+              },
+            ],
+          },
+          {
+            name: '信息管理',
+            path: '/information',
+            // icon: "AreaChartOutlined",
+            routes: [
+              {
+                name: '信息列表',
+                path: '/information/list',
+                component: '@/pages/information/list',
+              },
+              {
+                name: '信息添加',
+                path: '/information/add',
+                component: '@/pages/information/list',
+              },
+            ],
+          },
+        ],
+      });
+    } else {
+      res.send({
+        success: true,
+        code: '200',
+        data: [],
       });
     }
   },

@@ -37,7 +37,7 @@ const App: React.FC = () => {
         userInfo: null,
       });
       // 跳转
-      history.push('/login');
+      history.replace('/login');
     }
   };
 

@@ -3,6 +3,8 @@ import { history } from 'umi';
 import { BasicLayoutProps } from '@ant-design/pro-layout';
 
 import HeaderDropMenu from '@/components/HeaderDropMenu/index';
+
+import { menu } from './api/login';
 // import { RequestConfig } from 'umi';
 
 // export const request: RequestConfig = {
@@ -35,6 +37,7 @@ export async function getInitialState() {
     isLogin: info ? true : false,
     userInfo: info ? JSON.parse(info) : null,
   };
+  console.log('user', userState);
   return userState;
 }
 
@@ -42,19 +45,33 @@ export async function getInitialState() {
 export const layout = ({
   initialState,
 }: {
-  initialState: { isLogin: boolean };
+  initialState: { isLogin: boolean; userInfo: any };
 }): BasicLayoutProps => {
   return {
     onPageChange: () => {
       // 此处可以根据用户得登录状态，引导用户到指定得路由访问
-      // console.log("onChange", initialState)
+      console.log('onChange', initialState);
       let { isLogin } = initialState;
       if (!isLogin) {
-        history.push('/login');
+        history.replace('/login');
       }
     },
     rightContentRender: () => {
       return <HeaderDropMenu></HeaderDropMenu>;
+    },
+    menu: {
+      // 每当 initialState?.currentUser?.userid 发生修改时重新执行 request
+      params: {
+        userId: initialState?.userInfo?.userId,
+      },
+      request: async (params, defaultMenuData) => {
+        // initialState.currentUser 中包含了所有用户信息
+        const { data } = await menu({
+          data: { userId: params.userId },
+        });
+        console.log('menu', data);
+        return data;
+      },
     },
   };
 };
