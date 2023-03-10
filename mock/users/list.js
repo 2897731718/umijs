@@ -10,10 +10,10 @@ get 传递 通过 params 取值
 let totalPage = 3;
 let lastPageLimit = 2;
 let total = 1;
-let curPage = 0;
-let curLimit = 0;
+let curPage = 1;
+let curLimit = 10;
 const dataList = Mock.mock({
-  [`data|${curPage > totalPage ? lastPageLimit : curLimit}`]: [
+  [`data|100`]: [
     {
       'key|+1': 1,
       createTime: '@date("yyyy-MM-dd HH:mm:ss")',

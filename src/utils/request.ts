@@ -4,6 +4,7 @@ import { Toast } from 'antd-mobile';
 import { history } from 'umi';
 
 const timeout = 10000;
+const commonUrl = 'http://localhost:8000';
 // codeMessage仅供参考 具体根据和后端协商,在详细定义.
 const codeMessage: { [propName: string]: string } = {
   200: '服务器成功返回请求的数据。',
@@ -74,7 +75,7 @@ request.interceptors.request.use((url: string, options: RequestOptionsInit) => {
   let notCarryTokenArr: string[] = [];
   if (notCarryTokenArr.includes(url)) {
     return {
-      url,
+      url: commonUrl + url,
       options,
     };
   }
@@ -86,7 +87,7 @@ request.interceptors.request.use((url: string, options: RequestOptionsInit) => {
   };
 
   return {
-    url,
+    url: commonUrl + url,
     options: { ...options, interceptors: true, headers },
   };
 });

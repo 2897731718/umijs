@@ -97,13 +97,15 @@ const App: React.FC = () => {
   // }, [])
   // 方式二
   const { loading, data } = useRequest(async () => {
-    return await userList({ data: { page: 1, limit: 10 } });
+    return await userList({ params: { _page: 1, _limit: 4 } });
   });
   return (
     <Table
       loading={loading}
       columns={columns}
       dataSource={data ? data.data : []}
+      pagination={{ pageSize: 50 }}
+      scroll={{ y: 440 }}
     />
   );
 };

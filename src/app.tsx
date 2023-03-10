@@ -37,7 +37,6 @@ export async function getInitialState() {
     isLogin: info ? true : false,
     userInfo: info ? JSON.parse(info) : null,
   };
-  console.log('user', userState);
   return userState;
 }
 
@@ -50,7 +49,7 @@ export const layout = ({
   return {
     onPageChange: () => {
       // 此处可以根据用户得登录状态，引导用户到指定得路由访问
-      console.log('onChange', initialState);
+      // console.log('onChange', initialState);
       let { isLogin } = initialState;
       if (!isLogin) {
         history.replace('/login');
