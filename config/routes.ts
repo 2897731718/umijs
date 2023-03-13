@@ -19,14 +19,14 @@ export default [
     icon: 'AreaChartOutlined',
     routes: [
       {
-        name: '申请录入',
-        path: '/apply/add',
-        component: '@/pages/apply/list',
-      },
-      {
         name: '申请列表',
         path: '/apply/list',
         component: '@/pages/apply/list',
+      },
+      {
+        name: '申请录入',
+        path: '/apply/add',
+        component: '@/pages/apply/add',
       },
     ],
   },
@@ -55,7 +55,7 @@ export default [
       {
         name: '添加审核',
         path: '/examine/add',
-        component: '@/pages/examine/list',
+        component: '@/pages/examine/add',
       },
     ],
   },
@@ -72,7 +72,7 @@ export default [
       {
         name: '信息添加',
         path: '/information/add',
-        component: '@/pages/information/list',
+        component: '@/pages/information/add',
       },
     ],
   },

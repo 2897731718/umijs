@@ -1,6 +1,6 @@
 const jsonServer = require('json-server');
 const path = require('path');
-// const db = require("./login")
+const db = require('./db.js');
 // const Mock = require("mockjs")
 
 // console.log("data", db)
@@ -9,7 +9,8 @@ const port = 8000;
 const server = jsonServer.create();
 
 const middlewares = jsonServer.defaults();
-const router = jsonServer.router(path.join(__dirname, 'db.json'));
+// const router = jsonServer.router(path.join(__dirname, 'db.json'));
+const router = jsonServer.router(db);
 
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
@@ -19,9 +20,9 @@ server.use((req, res, next) => {
 
 // 登录校验
 server.post('/app/login', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { username, password } = req.body;
-  console.log(username, password);
+  // console.log(username, password);
   if (username === 'admin' && password === '111111') {
     res.jsonp({
       success: true,
@@ -75,14 +76,14 @@ server.post('/app/menu', (req, res) => {
           // icon: "AreaChartOutlined",
           routes: [
             {
-              name: '申请录入',
-              path: '/apply/add',
-              component: '@/pages/apply/list',
-            },
-            {
               name: '申请列表',
               path: '/apply/list',
               component: '@/pages/apply/list',
+            },
+            {
+              name: '申请录入',
+              path: '/apply/add',
+              component: '@/pages/apply/add',
             },
           ],
         },
@@ -111,7 +112,7 @@ server.post('/app/menu', (req, res) => {
             {
               name: '添加审核',
               path: '/examine/add',
-              component: '@/pages/examine/list',
+              component: '@/pages/examine/add',
             },
           ],
         },
@@ -128,7 +129,7 @@ server.post('/app/menu', (req, res) => {
             {
               name: '信息添加',
               path: '/information/add',
-              component: '@/pages/information/list',
+              component: '@/pages/information/add',
             },
           ],
         },
@@ -146,7 +147,7 @@ server.post('/app/menu', (req, res) => {
 server.use(router);
 
 router.render = (req, res) => {
-  console.log(res.locals);
+  // console.log(res.locals);
   res.jsonp({
     code: '200',
     data: res.locals.data,

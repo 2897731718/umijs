@@ -1,5 +1,4 @@
-
-import routes from "./routes"
+import routes from './routes';
 
 export default {
   nodeModulesTransform: {
@@ -8,6 +7,11 @@ export default {
   routes,
   fastRefresh: {},
   antd: {},
+  dva: {
+    skipModelValidate: true,
+    disableModelsReExport: true,
+    lazyLoad: true,
+  },
   layout: {
     // 支持任何不需要 dom 的
     // https://procomponents.ant.design/components/layout#prolayout

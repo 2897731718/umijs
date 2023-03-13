@@ -15,6 +15,11 @@ interface DataType {
 const App: React.FC = () => {
   const columns: ColumnsType<DataType> = [
     {
+      title: '序号',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
@@ -62,11 +67,10 @@ const App: React.FC = () => {
             type="primary"
             size="small"
             danger
-            onClick={() => {
-              console.log(_, record, index);
-              deleteUser({
-                data: { key: record.key },
-              });
+            onClick={async () => {
+              // console.log(_, record, index);
+              await deleteUser(record.key);
+              await fetchData();
             }}
           >
             删除
@@ -76,34 +80,30 @@ const App: React.FC = () => {
     },
   ];
   // 方式一
-  // const [dataTable, setDataTable] = useState({
-  //   total: 0,
-  //   page: 0,
-  //   limit: 0,
-  //   data: []
-  // })
-  // const [loading, setLoading] = useState(false)
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const { code, data } = await userList({
-  //       data: { page: 1, limit: 10 }
-  //     })
-  //     if (code === "200") {
-  //       console.log("res", data)
-  //       setDataTable(data)
-  //     }
-  //   }
-  //   fetchData()
-  // }, [])
+  const [dataTable, setDataTable] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const fetchData = async () => {
+    setLoading(true);
+    const { code, data } = await userList({
+      data: { page: 1, limit: 10 },
+    });
+    if (code === '200') {
+      setDataTable(data);
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   // 方式二
-  const { loading, data } = useRequest(async () => {
-    return await userList({ params: { _page: 1, _limit: 4 } });
-  });
+  // const { loading, data } = useRequest(async () => {
+  //   return await userList({ params: { _page: 1, _limit: 4 } });
+  // });
   return (
     <Table
       loading={loading}
       columns={columns}
-      dataSource={data ? data.data : []}
+      dataSource={dataTable}
       pagination={{ pageSize: 50 }}
       scroll={{ y: 440 }}
     />

@@ -1,6 +1,7 @@
 // 这个文件中 做项目得运行时配置
 import { history } from 'umi';
 import { BasicLayoutProps } from '@ant-design/pro-layout';
+import { message } from 'antd';
 
 import HeaderDropMenu from '@/components/HeaderDropMenu/index';
 
@@ -29,6 +30,14 @@ import { menu } from './api/login';
 //     }
 //   ],
 // };
+
+export const dva = {
+  config: {
+    onError(e: Error) {
+      message.error(e.message, 3);
+    },
+  },
+};
 
 export async function getInitialState() {
   let info =
@@ -68,7 +77,7 @@ export const layout = ({
         const { data } = await menu({
           data: { userId: params.userId },
         });
-        console.log('menu', data);
+        // console.log('menu', data);
         return data;
       },
     },
