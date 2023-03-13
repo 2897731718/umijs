@@ -1,13 +1,9 @@
 import api from '../utils/request';
 
 export function homeList(params: any) {
-  return api.post('/app/home/list', params);
+  return api.get('/home', params);
 }
 
-export function homeDelete(params: any) {
-  return api.deletes('/app/home/delete', params);
-}
-
-export function homeAdd(params: any) {
-  return api.post('/app/home/add', params);
+export function homeDelete(key: string, params?: any) {
+  return api.deletes(`/home/${key}`, params);
 }

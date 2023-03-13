@@ -1,47 +1,52 @@
 import { Effect, Subscription } from 'dva';
 
-import { applyList } from '../api/apply';
+import { examineList, examineDelete } from '../api/examine';
 
-const namespace = 'examine';
-
-interface applyType {
+interface examineType {
   namespace: string;
   state: any;
   reducers: {};
   effects: {
     getTable: Effect;
+    remove: Effect;
   };
   subscriptions: {
     setup: Subscription;
   };
 }
 
-const ApplyModel: applyType = {
+const initState = {
+  data: [],
+};
+
+const namespace = 'examine';
+
+const ExamineModel: examineType = {
   namespace,
-  state: {},
+  // connect 接收到的数据
+  state: initState,
   // 处理同步业务
   reducers: {
     // 第一个参数 接收的是 dispatch 传递的 payload ? 名字固定吗 还是可以自己命名
     // 第二个参数 是 put 返回过来的 payload
     // 接收上方 state 中的数据 action { type, payload}
     getList: (state: any, action: any) => {
-      // console.log(state, action)
-      return {
-        // data: action.payload
-        data: [1],
-      };
+      // console.log(state, action);
+      return { ...state, data: action.payload };
+    },
+    test: () => {
+      return [111];
     },
   },
   effects: {
-    // 这里每个函数都有两个参数，（action,effect), effect = {put,call,select}
+    // 这里每个函数都有两个参数，( action, effect ), effect = { put, call, select }
     *getTable(action, { call, put }) {
       // call 执行异步函数，比如请求
       try {
         // call 第一个参数传递 异步方法 他会帮忙调用 第二个参数传递 第一个方法的参数
-        const data = yield call(applyList, {
+        const { data } = yield call(examineList, {
           params: { _page: 1, _limit: 10 },
         });
-        // console.log("data", action)
         yield put({
           type: 'getList',
           payload: { data }, // 这里直接返回data会获取不到数据，因此我用对象又包了一层
@@ -50,13 +55,24 @@ const ApplyModel: applyType = {
         console.log(error);
       }
     },
+    *remove(action, { call, put }) {
+      const { key } = action.payload;
+      yield call(examineDelete, key);
+      const { data } = yield call(examineList, {
+        params: { _page: 1, _limit: 10 },
+      });
+      yield put({
+        type: 'getList',
+        payload: { data }, // 这里直接返回data会获取不到数据，因此我用对象又包了一层
+      });
+    },
   },
   // 订阅 可以用作到达某一个路由时 进行什么操作 比如获取 数据
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen((location, action) => {
         // console.log(location.query)
-        if (location.pathname === '/apply/list') {
+        if (location.pathname === '/examine/list') {
           /**
            * type 表示 调用的参数
            * 第二个参数 payload 传递 参数
@@ -72,4 +88,4 @@ const ApplyModel: applyType = {
   },
 };
 
-export default ApplyModel;
+export default ExamineModel;

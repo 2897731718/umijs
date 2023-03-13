@@ -1,13 +1,9 @@
 import api from '../utils/request';
 
 export function newsList(params: any) {
-  return api.post('/app/news/list', params);
+  return api.get('/news', params);
 }
 
-export function newsDelete(params: any) {
-  return api.deletes('/app/news/delete', params);
-}
-
-export function newsAdd(params: any) {
-  return api.post('/app/news/add', params);
+export function newsDelete(key: string, params?: any) {
+  return api.deletes(`/news/${key}`, params);
 }

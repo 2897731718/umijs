@@ -1,13 +1,9 @@
 import api from '../utils/request';
 
 export function examineList(params: any) {
-  return api.post('/app/examine/list', params);
+  return api.get('/examine', params);
 }
 
-export function examineDelete(params: any) {
-  return api.deletes('/app/examine/delete', params);
-}
-
-export function examineAdd(params: any) {
-  return api.post('/app/examine/add', params);
+export function examineDelete(key: string, params?: any) {
+  return api.deletes(`/examine/${key}`, params);
 }
