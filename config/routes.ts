@@ -4,15 +4,17 @@ export default [
   {
     name: '首页',
     path: '/',
-    component: '@/pages/home/browsing',
+    component: '@/pages/home',
     icon: 'AreaChartOutlined',
+    hideInBreadcrumb: false,
   },
-  {
-    name: '数据统计',
-    path: '/',
-    component: '@/pages/statistics',
-    icon: 'AreaChartOutlined',
-  },
+  // {
+  //   name: '数据统计',
+  //   path: '/',
+  //   component: '@/pages/statistics',
+  //   icon: 'AreaChartOutlined',
+  //   hideInBreadcrumb: false,
+  // },
   {
     name: '我的申请',
     path: '/apply',

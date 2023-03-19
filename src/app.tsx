@@ -56,6 +56,7 @@ export const layout = ({
   initialState: { isLogin: boolean; userInfo: any };
 }): BasicLayoutProps => {
   return {
+    // logo: '',
     onPageChange: () => {
       // 此处可以根据用户得登录状态，引导用户到指定得路由访问
       // console.log('onChange', initialState);

@@ -1,0 +1,376 @@
+@primary-color: green;
+@error-color: red;
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
+}
+
+html,
+body {
+  overflow: hidden;
+  margin: 0;
+}
+
+#root {
+  overflow: auto;
+}
+
+ol,
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: rgba(224, 224, 224, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.firesoon-content {
+  height: 100% !important;
+
+  .firesoon-section {
+    height: calc(100% - 36px);
+  }
+}
+
+// 状态码页异常样式
+.statusPage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  > span {
+    font-size: 270px;
+  }
+
+  .tip {
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 24px;
+    margin-top: -48px;
+  }
+}
+
+.ant-modal {
+  top: 48px;
+}
+
+// modal全局样式
+.ant-modal-title,
+.ant-card-head-title,
+.ant-modal-confirm-body .ant-modal-confirm-title,
+.ant-drawer-header .ant-drawer-title {
+  font-weight: 700;
+  color: #000;
+}
+
+// drawer全局样式
+.fs-drawer {
+  .ant-drawer-wrapper-body {
+    display: flex;
+    flex-direction: column;
+
+    .ant-drawer-header {
+      padding: 12px 16px !important;
+    }
+
+    .ant-drawer-close {
+      width: 48px;
+      height: 48px;
+      line-height: 48px;
+    }
+
+    .ant-drawer-body {
+      padding: 0;
+      height: calc(100% - 55px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+
+      .fs-drawer-content {
+        position: relative;
+        padding: 16px;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .fs-drawer-footer {
+        height: 56px;
+        line-height: 56px;
+        border-top: 1px solid #e7e7e7;
+        padding: 0 16px;
+        text-align: right;
+
+        .ant-btn {
+          margin-left: 16px;
+        }
+      }
+    }
+  }
+}
+
+.fs-modal-form {
+  .ant-form-item {
+    margin: 0;
+
+    .fs-form-text {
+      color: #999999;
+    }
+
+    .ant-form-title {
+      font-weight: bold;
+      margin-right: 4px;
+    }
+
+    .ant-form-text {
+      position: relative;
+
+      &.split {
+        line-height: 0;
+        padding-right: 19px;
+
+        &::before {
+          position: absolute;
+          content: '|';
+          right: 8px;
+          top: -1px;
+        }
+      }
+    }
+
+    .ant-form-item-label {
+      font-weight: bold;
+    }
+
+    .fs-form-inner-item {
+      display: inline-block;
+      width: calc(50% - 6px);
+      margin-right: 12px;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+}
+
+.fs-modal-form-2 {
+  .ant-form-item {
+    margin-bottom: 12px;
+  }
+}
+
+.fs-error {
+  color: #e02020 !important;
+}
+
+.fs-link {
+  cursor: pointer;
+}
+
+.primary-color {
+  color: @primary-color;
+}
+
+.fs-mb-12 {
+  margin-bottom: 12px;
+}
+
+.fs-mb-16 {
+  margin-bottom: 16px;
+}
+
+.fs-chart-tip-text {
+  font-size: 12px;
+  color: #999999;
+}
+
+.fs-table {
+  .ant-table {
+    .ant-table-summary {
+      .ant-table-summary-cell {
+        background: #eaeffa !important;
+      }
+
+      &.fs-summary-unselect {
+        > tr {
+          > th {
+            background: #ffffff !important;
+            border-bottom: 1px solid #dbe0eb !important;
+            transition: background 0.3s ease;
+          }
+        }
+      }
+    }
+
+    .ant-table-summary-thead-unselect {
+      background: #ffffff !important;
+      transition: background 0.3s ease;
+    }
+  }
+
+  .ant-table-placeholder {
+    border: none;
+  }
+}
+
+.IE {
+  .fs-table {
+    .ant-table {
+      .ant-table-summary-thead-scrollbar,
+      .ant-table-summary-thead-unselect {
+        background: transparent !important;
+      }
+    }
+  }
+}
+
+.ant-table-fixed-left.ant-table-fixed-left-summary {
+  margin-top: -1px;
+}
+
+.ant-radio-group-solid {
+  .ant-radio-button-wrapper-checked {
+    font-weight: 700;
+  }
+}
+
+// 上传附件组件的删除按钮显示
+.ant-upload-list-item-card-actions {
+  opacity: 1 !important;
+}
+
+.ant-badge {
+  .ant-badge-status-dot {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .ant-badge-status-red {
+    background: #e02020 !important;
+  }
+
+  .ant-badge-status-yellow {
+    background: #faad14 !important;
+  }
+}
+
+.fs-modal-confirm-icon {
+  color: @error-color !important;
+}
+
+.fs-modal-confirm-desc {
+  color: #999999;
+}
+
+.fs-ratio-icon {
+  margin-left: 8px;
+}
+
+.fs-table-read {
+  color: #999999;
+}
+
+.fs-table-select {
+  background-color: rgba(51, 103, 214, 0.1);
+}
+
+.fs-rangePicker {
+  .ant-calendar-picker-container {
+    background: #ffffff;
+  }
+}
+
+.table-operation-link {
+  margin-right: 8px;
+  color: @primary-color;
+  cursor: pointer;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.ant-form-item-control {
+  .ant-checkbox-wrapper {
+    margin: 0 8px 0 0 !important;
+    line-height: 40px;
+  }
+}
+
+.fs-expand-td {
+  position: relative;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow: hidden;
+  .fs-custom-expand-icon {
+    position: relative;
+    height: 100% !important;
+    .anticon {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+}
+
+.ant-table-row-level-1 {
+  background-color: #f0f7ff !important;
+}
+
+.fs-copy {
+  display: inline;
+  cursor: pointer;
+  color: @primary-color !important;
+  vertical-align: top;
+}
+
+.page_header_right_next {
+  .fs-select-wrap {
+    margin-right: 6px !important;
+  }
+
+  .fs-download-btn {
+    margin-left: 8px;
+  }
+}
+
+.filter-popover {
+  .ant-popover-arrow {
+    display: none;
+  }
+
+  .filter-popover-inner {
+    span {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    p {
+      margin: 0;
+      line-height: 24px;
+      color: #999999;
+      white-space: nowrap;
+    }
+  }
+}

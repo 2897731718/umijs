@@ -20,10 +20,12 @@ const items: MenuProps['items'] = [
 
 const App: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
+  const res =
+    localStorage.getItem('userInfo') || sessionStorage.getItem('userInfo');
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    message.info('Click on left button.');
-    console.log('click left button', e);
+    // message.info('Click on left button.');
+    // console.log('click left button', e);
   };
 
   const handleMenuClick: MenuProps['onClick'] = async ({ key }) => {
@@ -48,9 +50,11 @@ const App: React.FC = () => {
 
   return (
     <Space wrap>
-      <Dropdown.Button menu={menuProps} onClick={handleButtonClick}>
-        {/* Dropdown */}
-      </Dropdown.Button>
+      {res ? (
+        <Dropdown.Button menu={menuProps} onClick={handleButtonClick}>
+          {JSON.parse(res).username}
+        </Dropdown.Button>
+      ) : null}
     </Space>
   );
 };

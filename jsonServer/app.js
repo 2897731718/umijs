@@ -54,20 +54,7 @@ server.post('/app/menu', (req, res) => {
         {
           name: '首页',
           path: '/',
-          component: '@/pages/home/browsing',
-          // icon: "AreaChartOutlined",
-        },
-      ],
-    });
-  } else if (userId === 'admin') {
-    res.jsonp({
-      success: true,
-      code: '200',
-      data: [
-        {
-          name: '数据统计',
-          path: '/',
-          component: '@/pages/statistics',
+          component: '@/pages/home',
           // icon: "AreaChartOutlined",
         },
         {
@@ -86,6 +73,19 @@ server.post('/app/menu', (req, res) => {
               component: '@/pages/apply/add',
             },
           ],
+        },
+      ],
+    });
+  } else if (userId === 'admin') {
+    res.jsonp({
+      success: true,
+      code: '200',
+      data: [
+        {
+          name: '数据统计',
+          path: '/',
+          component: '@/pages/home',
+          // icon: "AreaChartOutlined",
         },
         {
           name: '用户管理',
