@@ -1,6 +1,13 @@
 import { Effect, Subscription } from 'dva';
 
-import { examineList, examineDelete } from '../api/examine';
+import {
+  examineList,
+  examineDelete,
+  examineAdd,
+  examinePatch,
+} from '../api/examine';
+
+const namespace = 'examine';
 
 interface examineType {
   namespace: string;
@@ -9,6 +16,8 @@ interface examineType {
   effects: {
     getTable: Effect;
     remove: Effect;
+    add: Effect;
+    patch: Effect;
   };
   subscriptions: {
     setup: Subscription;
@@ -19,9 +28,7 @@ const initState = {
   data: [],
 };
 
-const namespace = 'examine';
-
-const ExamineModel: examineType = {
+const examineModel: examineType = {
   namespace,
   // connect 接收到的数据
   state: initState,
@@ -44,8 +51,9 @@ const ExamineModel: examineType = {
       // call 执行异步函数，比如请求
       try {
         // call 第一个参数传递 异步方法 他会帮忙调用 第二个参数传递 第一个方法的参数
+        // console.log(action.payload)
         const { data } = yield call(examineList, {
-          params: { _page: 1, _limit: 10 },
+          params: action.payload?.data,
         });
         yield put({
           type: 'getList',
@@ -58,13 +66,16 @@ const ExamineModel: examineType = {
     *remove(action, { call, put }) {
       const { key } = action.payload;
       yield call(examineDelete, key);
-      const { data } = yield call(examineList, {
-        params: { _page: 1, _limit: 10 },
-      });
-      yield put({
-        type: 'getList',
-        payload: { data }, // 这里直接返回data会获取不到数据，因此我用对象又包了一层
-      });
+    },
+    *add(action, { call, put }) {
+      const { data } = action.payload;
+      // console.log("65", action.payload)
+      yield call(examineAdd, { data: data });
+    },
+    *patch(action, { call, put }) {
+      const { data, key } = action.payload;
+      // console.log("72", action.payload)
+      yield call(examinePatch, key, { data: data });
     },
   },
   // 订阅 可以用作到达某一个路由时 进行什么操作 比如获取 数据
@@ -88,4 +99,4 @@ const ExamineModel: examineType = {
   },
 };
 
-export default ExamineModel;
+export default examineModel;

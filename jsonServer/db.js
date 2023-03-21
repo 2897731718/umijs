@@ -41,7 +41,10 @@ const applyList = Mock.mock({
       createTime: '@date("yyyy-MM-dd HH:mm:ss")',
       'status|1': ['0', '1', '2', '3'],
       name: Random.cname(),
-      age: 32,
+      studId: '20191923',
+      classes: '1910',
+      'auditState|1': ['1', '2', '3'],
+      reason: '生病了',
       address: Random.province(),
       tags: ['nice', 'developer'],
     },
@@ -49,14 +52,30 @@ const applyList = Mock.mock({
 });
 
 const examineList = Mock.mock({
-  [`examine|20`]: [
+  [`examine|5`]: [
     {
-      'id|+1': 1,
-      'key|+1': 1,
+      'id|+2': 1,
+      'key|+2': 1,
       createTime: '@date("yyyy-MM-dd HH:mm:ss")',
       'status|1': ['0', '1', '2', '3'],
       name: Random.cname(),
-      age: 32,
+      studId: '20191923',
+      classes: '1910',
+      'auditState|1': ['1', '2', '3'],
+      reason: '生病了',
+      address: Random.province(),
+      tags: ['nice', 'developer'],
+    },
+    {
+      'id|+2': 2,
+      'key|+2': 2,
+      createTime: '@date("yyyy-MM-dd HH:mm:ss")',
+      'status|1': ['0', '1', '2', '3'],
+      name: Random.cname(),
+      studId: '20191923',
+      classes: '1910',
+      'auditState|1': ['1', '2', '3'],
+      reason: '生病了',
       address: Random.province(),
       tags: ['nice', 'developer'],
     },

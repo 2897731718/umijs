@@ -1,32 +1,58 @@
-import React from 'react';
-import { Space, Table, Tag, Button } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import React, { useEffect, useState } from 'react';
+import { Space, Table, Modal, Button, Form, Input } from 'antd';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 
-import { useDispatch, useSelector } from 'umi';
+import { connect } from 'umi';
 
+import AuditState from '@/components/AuditState';
+
+import '@/pages/index.less';
+import { examineDelete } from '@/api/examine';
 interface DataType {
   key: string;
   name: string;
-  age: number;
+  classes: number | string;
+  studId: number | string;
+  reason: string;
   address: string;
-  tags: string[];
+  auditState: string | number;
+  // tags: string[];
 }
+
 interface PageProps {
   examine: any;
   loading: boolean;
   dispatch: any;
 }
+
+interface keyValueType {
+  [key: string]: string;
+}
+
+interface TableParams {
+  pagination?: TablePaginationConfig;
+}
+
+const formMap: keyValueType = {
+  name: '姓名',
+  classes: '班级',
+  studId: '学号',
+  reason: '原因',
+  address: '过境信息',
+  // auditState: "",
+};
+
+const getRandomParams = (params: TableParams) => ({
+  _page: params.pagination?.current,
+  _limit: params.pagination?.pageSize,
+});
+
 /**
  * props 可以结构出 module 里面的 reducer 传递过来的参数
  * @param props
  * @returns
  */
-const App: React.FC<PageProps> = (props) => {
-  const dispatch = useDispatch();
-  const { data, loading } = useSelector(({ examine, loading }: any) => ({
-    data: examine.data.data,
-    loading: loading.models.examine,
-  }));
+const App: React.FC<PageProps> = ({ examine, dispatch }) => {
   const columns: ColumnsType<DataType> = [
     {
       title: '序号',
@@ -40,33 +66,31 @@ const App: React.FC<PageProps> = (props) => {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: '年龄',
-      dataIndex: 'age',
-      key: 'age',
+      title: '班级',
+      dataIndex: 'classes',
+      key: 'classes',
     },
     {
-      title: '家庭地址',
+      title: '学号',
+      dataIndex: 'studId',
+      key: 'studId',
+    },
+    {
+      title: '离校原因',
+      dataIndex: 'reason',
+      key: 'reason',
+    },
+    {
+      title: '过境信息',
       dataIndex: 'address',
       key: 'address',
     },
     {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
+      title: '审核状态',
+      dataIndex: 'auditState',
+      key: 'auditState',
+      render: (_, records, index) => (
+        <AuditState auditState={records.auditState}></AuditState>
       ),
     },
     {
@@ -74,19 +98,18 @@ const App: React.FC<PageProps> = (props) => {
       key: 'action',
       render: (_, record, index) => (
         <Space size="middle">
-          <Button type="primary" size="small">
+          <Button
+            type="primary"
+            size="small"
+            onClick={() => examineEdit(record)}
+          >
             编辑
           </Button>
           <Button
             type="primary"
             size="small"
             danger
-            onClick={async () => {
-              dispatch({
-                type: 'examine/remove',
-                payload: { key: record.key },
-              });
-            }}
+            onClick={() => examineDelete(record.key)}
           >
             删除
           </Button>
@@ -94,16 +117,158 @@ const App: React.FC<PageProps> = (props) => {
       ),
     },
   ];
+  // const [data, setData] = useState([])
+  const dataTable = examine?.data?.reverse();
+  const [isAdd, setIsAdd] = useState(false);
+  const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
+  const [tableParams, setTableParams] = useState<TableParams>({
+    pagination: {
+      current: 1,
+      pageSize: 10,
+    },
+  });
+  const [parent, setParent] = useState({
+    type: 'add',
+    key: '1',
+  });
+
+  // 获取 pageSize
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    setTableParams({
+      pagination,
+    });
+    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+      // setData([])
+    }
+  };
+
+  const [formData, setFormData] = useState<keyValueType>({
+    name: '',
+    classes: '',
+    studId: '',
+    reason: '',
+    address: '',
+  });
+
+  useEffect(() => {
+    // console.log("153", getRandomParams(tableParams))
+    dispatch({
+      type: 'examine/getTable',
+      payload: { data: null },
+    });
+  }, [JSON.stringify(tableParams)]);
+
+  // 确认提交按钮
+  const defineAdd = async () => {
+    setIsLoading(true);
+    const data = form.getFieldsValue();
+
+    if (parent.type === 'add') {
+      data.auditState = '1';
+      data.key = dataTable.length + 1;
+
+      await dispatch({
+        type: 'examine/add',
+        payload: { data },
+      });
+    } else if (parent.type === 'edit') {
+      await dispatch({
+        type: 'examine/patch',
+        payload: { key: parent.key, data },
+      });
+    }
+    await dispatch({
+      type: 'examine/getTable',
+    });
+
+    setIsLoading(false);
+    setParent({
+      type: 'add',
+      key: '1',
+    });
+
+    form.resetFields();
+    cancelShowAdd();
+  };
+  // modal 展示
+  const cancelShowAdd = () => setIsAdd(!isAdd);
+
+  const examineEdit = (values: any) => {
+    form.setFieldsValue({
+      name: values.name,
+      classes: values.classes,
+      studId: values.studId,
+      reason: values.reason,
+      address: values.address,
+    });
+    setParent({
+      type: 'edit',
+      key: values.key,
+    });
+    cancelShowAdd();
+  };
+
+  const examineDelete = (key: string) => {
+    dispatch({
+      type: 'examine/remove',
+      payload: { key },
+    });
+    dispatch({
+      type: 'examine/getTable',
+    });
+  };
 
   return (
-    <Table
-      loading={loading}
-      columns={columns}
-      dataSource={data}
-      pagination={{ pageSize: 50 }}
-      scroll={{ y: 440 }}
-    />
+    <>
+      <Button type="primary" className="margin-xs" onClick={cancelShowAdd}>
+        添加申请
+      </Button>
+      <Table
+        className="padding-xs"
+        columns={columns}
+        dataSource={dataTable}
+        pagination={tableParams.pagination}
+        onChange={handleTableChange}
+      />
+      <Modal
+        title="请假申请"
+        open={isAdd}
+        onOk={defineAdd}
+        onCancel={cancelShowAdd}
+        okText="确认"
+        cancelText="取消"
+        confirmLoading={isLoading}
+      >
+        <Form form={form}>
+          {Object.keys(formData).map((item, index) => (
+            <Form.Item
+              key={index}
+              name={item}
+              label={formMap[item]}
+              initialValue={formData[item] ? formData[item] : ''}
+            >
+              <Input placeholder={`请输入${item}`} />
+            </Form.Item>
+          ))}
+        </Form>
+      </Modal>
+    </>
   );
 };
+/**
+ * 通过 connect 连接 model 中的 namespace 获取 reducer 中的 数据
+ * 并且 该函数必须返回参数 props 才能接收到传过来的值
+ * connect 是连接的桥梁
+ * @param state 可以接收到所有 model 注册的数据 如果需要哪一个 model 中的数据 就需要根据 namespace 对应的名称进行结构获取
+ * @returns
+ */
+const connectFun = (state: { examine: any; loading: any }) => {
+  // console.log("state", state.examine)
+  return {
+    examine: state.examine?.data,
+    loading: state.loading.models.index,
+  };
+};
 
-export default App;
+export default connect(connectFun)(App);

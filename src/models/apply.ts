@@ -1,6 +1,6 @@
 import { Effect, Subscription } from 'dva';
 
-import { applyList, applyDelete } from '../api/apply';
+import { applyList, applyDelete, applyAdd, applyPatch } from '../api/apply';
 
 const namespace = 'apply';
 
@@ -11,6 +11,8 @@ interface applyType {
   effects: {
     getTable: Effect;
     remove: Effect;
+    add: Effect;
+    patch: Effect;
   };
   subscriptions: {
     setup: Subscription;
@@ -31,7 +33,7 @@ const ApplyModel: applyType = {
     // 第二个参数 是 put 返回过来的 payload
     // 接收上方 state 中的数据 action { type, payload}
     getList: (state: any, action: any) => {
-      console.log(state, action);
+      // console.log(state, action);
       return { ...state, data: action.payload };
     },
     test: () => {
@@ -44,8 +46,9 @@ const ApplyModel: applyType = {
       // call 执行异步函数，比如请求
       try {
         // call 第一个参数传递 异步方法 他会帮忙调用 第二个参数传递 第一个方法的参数
+        // console.log(action.payload)
         const { data } = yield call(applyList, {
-          params: { _page: 1, _limit: 10 },
+          params: action.payload?.data,
         });
         yield put({
           type: 'getList',
@@ -58,13 +61,16 @@ const ApplyModel: applyType = {
     *remove(action, { call, put }) {
       const { key } = action.payload;
       yield call(applyDelete, key);
-      const { data } = yield call(applyList, {
-        params: { _page: 1, _limit: 10 },
-      });
-      yield put({
-        type: 'getList',
-        payload: { data }, // 这里直接返回data会获取不到数据，因此我用对象又包了一层
-      });
+    },
+    *add(action, { call, put }) {
+      const { data } = action.payload;
+      // console.log("65", action.payload)
+      yield call(applyAdd, { data: data });
+    },
+    *patch(action, { call, put }) {
+      const { data, key } = action.payload;
+      console.log('72', action.payload);
+      yield call(applyPatch, key, { data: data });
     },
   },
   // 订阅 可以用作到达某一个路由时 进行什么操作 比如获取 数据

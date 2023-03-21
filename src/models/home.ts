@@ -31,7 +31,7 @@ const homeModel: homeType = {
     // 第二个参数 是 put 返回过来的 payload
     // 接收上方 state 中的数据 action { type, payload}
     getList: (state: any, action: any) => {
-      console.log(state, action);
+      // console.log(state, action);
       return { ...state, data: action.payload };
     },
     test: () => {

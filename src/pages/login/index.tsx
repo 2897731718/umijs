@@ -4,6 +4,9 @@ import { useModel, history } from 'umi';
 
 import { login } from '@/api/login';
 
+import loginImg from '@/assets/login.png';
+
+import './index.less';
 /**
  * 登录逻辑
  * - 这里使用了 layout 布局
@@ -54,56 +57,59 @@ const App: React.FC = () => {
   };
 
   return (
-    <Row align="middle" style={{ height: '100vh', background: '#f1f2f6' }}>
-      <Col span={8} offset={8}>
-        <Card title="登录" extra={<a href="#">注册</a>}>
-          <Form
-            name="basic"
-            labelCol={{ span: 6 }}
-            wrapperCol={{ span: 18 }}
-            // style={{ maxWidth: 600 }}
-            initialValues={userData}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
-            <Form.Item
-              label="Username"
-              name="username"
-              rules={[
-                { required: true, message: 'Please input your username!' },
-              ]}
+    <div className="background">
+      <div className="title">校园疫情防疫系统</div>
+      <Row align="middle" className="row">
+        <Col span={8} offset={8}>
+          <Card title="登录" extra={<a href="#">注册</a>}>
+            <Form
+              name="basic"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              // style={{ maxWidth: 600 }}
+              initialValues={userData}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
             >
-              <Input />
-            </Form.Item>
+              <Form.Item
+                label="Username"
+                name="username"
+                rules={[
+                  { required: true, message: 'Please input your username!' },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                { required: true, message: 'Please input your password!' },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  { required: true, message: 'Please input your password!' },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
 
-            <Form.Item
-              name="remember"
-              valuePropName="checked"
-              wrapperCol={{ offset: 6, span: 18 }}
-            >
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
+              <Form.Item
+                name="remember"
+                valuePropName="checked"
+                wrapperCol={{ offset: 6, span: 18 }}
+              >
+                <Checkbox>Remember me</Checkbox>
+              </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
-              <Button type="primary" htmlType="submit">
-                Login
-              </Button>
-            </Form.Item>
-          </Form>
-        </Card>
-      </Col>
-    </Row>
+              <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
+                <Button type="primary" htmlType="submit">
+                  Login
+                </Button>
+              </Form.Item>
+            </Form>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
