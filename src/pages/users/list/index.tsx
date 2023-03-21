@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Space, Table, Tag, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useRequest } from 'umi';
 
-import { userList, deleteUser } from '@/api/user';
+import { userList, userPatch } from '@/api/user';
+
+import AccountState from '@/components/AccountState';
 interface DataType {
   key: string;
   name: string;
   age: number;
   address: string;
   tags: string[];
+  status: string;
 }
 
 const App: React.FC = () => {
@@ -31,28 +33,26 @@ const App: React.FC = () => {
       key: 'age',
     },
     {
+      title: '班级',
+      dataIndex: 'classes',
+      key: 'classes',
+    },
+    {
+      title: '学号',
+      dataIndex: 'studId',
+      key: 'studId',
+    },
+    {
       title: '家庭地址',
       dataIndex: 'address',
       key: 'address',
     },
     {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
+      title: '账号状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: (_, records, index) => (
+        <AccountState status={records.status}></AccountState>
       ),
     },
     {
@@ -60,20 +60,22 @@ const App: React.FC = () => {
       key: 'action',
       render: (_, record, index) => (
         <Space size="middle">
-          <Button type="primary" size="small">
-            编辑
+          <Button
+            type="primary"
+            size="small"
+            disabled={record.status === '1'}
+            onClick={() => noBan(record)}
+          >
+            解禁
           </Button>
           <Button
             type="primary"
             size="small"
+            disabled={record.status === '2'}
             danger
-            onClick={async () => {
-              // console.log(_, record, index);
-              await deleteUser(record.key);
-              await fetchData();
-            }}
+            onClick={() => ban(record)}
           >
-            删除
+            封禁
           </Button>
         </Space>
       ),
@@ -85,8 +87,9 @@ const App: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     const { code, data } = await userList({
-      data: { page: 1, limit: 10 },
+      data: { _page: 1, _limit: 10 },
     });
+
     if (code === '200') {
       setDataTable(data);
     }
@@ -99,6 +102,16 @@ const App: React.FC = () => {
   // const { loading, data } = useRequest(async () => {
   //   return await userList({ params: { _page: 1, _limit: 4 } });
   // });
+  const ban = async (values: any) => {
+    await userPatch(values.key, { data: { status: '2' } });
+    fetchData();
+  };
+
+  const noBan = async (values: any) => {
+    await userPatch(values.key, { data: { status: '1' } });
+    fetchData();
+  };
+
   return (
     <Table
       loading={loading}

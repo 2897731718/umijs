@@ -124,8 +124,7 @@ const App: React.FC<PageProps> = () => {
       ),
     },
   ];
-  // const [data, setData] = useState([])
-  const dataTable = data?.reverse();
+  const dataTable = data ? data?.reverse() : [];
   const [isAdd, setIsAdd] = useState(false);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
@@ -208,7 +207,6 @@ const App: React.FC<PageProps> = () => {
       <Modal
         title="请假申请"
         open={isAdd}
-        onOk={defineAdd}
         onCancel={cancelShowAdd}
         okText="确认"
         cancelText="取消"

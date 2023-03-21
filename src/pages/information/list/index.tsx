@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Space, Table, Modal, Button, Form, Input } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 
-import { connect } from 'umi';
+import { useDispatch, useSelector } from 'umi';
 
 import AuditState from '@/components/AuditState';
 
 import '@/pages/index.less';
-import { informationDelete } from '@/api/information';
+
 interface DataType {
   key: string;
-  name: string;
-  classes: number | string;
-  studId: number | string;
-  reason: string;
-  address: string;
+  title: string;
+  content: string;
+  url: string;
+  createTime: string;
   auditState: string | number;
   // tags: string[];
 }
@@ -34,11 +33,10 @@ interface TableParams {
 }
 
 const formMap: keyValueType = {
-  name: '姓名',
-  classes: '班级',
-  studId: '学号',
-  reason: '原因',
-  address: '过境信息',
+  title: '标题',
+  content: '内容',
+  url: '链接',
+  createTime: '创建时间',
   // auditState: "",
 };
 
@@ -52,7 +50,12 @@ const getRandomParams = (params: TableParams) => ({
  * @param props
  * @returns
  */
-const App: React.FC<PageProps> = ({ information, dispatch }) => {
+const App: React.FC<PageProps> = () => {
+  const dispatch = useDispatch();
+  const { data, loading } = useSelector(({ information, loading }: any) => ({
+    data: information.data.data,
+    loading: loading.models.information,
+  }));
   const columns: ColumnsType<DataType> = [
     {
       title: '序号',
@@ -60,30 +63,25 @@ const App: React.FC<PageProps> = ({ information, dispatch }) => {
       key: 'id',
     },
     {
-      title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
+      title: '标题',
+      dataIndex: 'title',
+      key: 'title',
       render: (text) => <a>{text}</a>,
     },
     {
-      title: '班级',
-      dataIndex: 'classes',
-      key: 'classes',
+      title: '内容',
+      dataIndex: 'content',
+      key: 'content',
     },
     {
-      title: '学号',
-      dataIndex: 'studId',
-      key: 'studId',
+      title: '连接',
+      dataIndex: 'url',
+      key: 'url',
     },
     {
-      title: '离校原因',
-      dataIndex: 'reason',
-      key: 'reason',
-    },
-    {
-      title: '过境信息',
-      dataIndex: 'address',
-      key: 'address',
+      title: '创建时间',
+      dataIndex: 'createTime',
+      key: 'createTime',
     },
     {
       title: '审核状态',
@@ -117,8 +115,7 @@ const App: React.FC<PageProps> = ({ information, dispatch }) => {
       ),
     },
   ];
-  // const [data, setData] = useState([])
-  const dataTable = information?.data?.reverse();
+  const dataTable = data ? data?.reverse() : [];
   const [isAdd, setIsAdd] = useState(false);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
@@ -144,11 +141,10 @@ const App: React.FC<PageProps> = ({ information, dispatch }) => {
   };
 
   const [formData, setFormData] = useState<keyValueType>({
-    name: '',
-    classes: '',
-    studId: '',
-    reason: '',
-    address: '',
+    title: '',
+    content: '',
+    url: '',
+    createTime: '',
   });
 
   useEffect(() => {
@@ -196,11 +192,10 @@ const App: React.FC<PageProps> = ({ information, dispatch }) => {
 
   const informationEdit = (values: any) => {
     form.setFieldsValue({
-      name: values.name,
-      classes: values.classes,
-      studId: values.studId,
-      reason: values.reason,
-      address: values.address,
+      title: values.title,
+      content: values.content,
+      url: values.url,
+      createTime: values.createTime,
     });
     setParent({
       type: 'edit',
@@ -230,6 +225,7 @@ const App: React.FC<PageProps> = ({ information, dispatch }) => {
         dataSource={dataTable}
         pagination={tableParams.pagination}
         onChange={handleTableChange}
+        loading={loading}
       />
       <Modal
         title="请假申请"
@@ -256,19 +252,5 @@ const App: React.FC<PageProps> = ({ information, dispatch }) => {
     </>
   );
 };
-/**
- * 通过 connect 连接 model 中的 namespace 获取 reducer 中的 数据
- * 并且 该函数必须返回参数 props 才能接收到传过来的值
- * connect 是连接的桥梁
- * @param state 可以接收到所有 model 注册的数据 如果需要哪一个 model 中的数据 就需要根据 namespace 对应的名称进行结构获取
- * @returns
- */
-const connectFun = (state: { information: any; loading: any }) => {
-  // console.log("state", state.information)
-  return {
-    information: state.information?.data,
-    loading: state.loading.models.index,
-  };
-};
 
-export default connect(connectFun)(App);
+export default App;

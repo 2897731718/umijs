@@ -7,7 +7,7 @@ import { connect } from 'umi';
 import AuditState from '@/components/AuditState';
 
 import '@/pages/index.less';
-import { applyDelete } from '@/api/apply';
+
 interface DataType {
   key: string;
   name: string;
@@ -114,7 +114,7 @@ const App: React.FC<PageProps> = ({ apply, dispatch }) => {
     },
   ];
   // const [data, setData] = useState([])
-  const dataTable = apply?.data?.reverse();
+  const dataTable = apply.data ? apply?.data?.reverse() : null;
   const [isAdd, setIsAdd] = useState(false);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
