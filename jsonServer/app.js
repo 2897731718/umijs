@@ -44,7 +44,7 @@ server.post('/app/login', (req, res) => {
   }
 });
 server.post('/app/menu', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { userId } = req.body;
   if (userId === 'user') {
     res.jsonp({
@@ -67,11 +67,11 @@ server.post('/app/menu', (req, res) => {
               path: '/apply/list',
               component: '@/pages/apply/list',
             },
-            {
-              name: '申请录入',
-              path: '/apply/add',
-              component: '@/pages/apply/add',
-            },
+            // {
+            //   name: '申请录入',
+            //   path: '/apply/add',
+            //   component: '@/pages/apply/add',
+            // },
           ],
         },
       ],
@@ -109,11 +109,11 @@ server.post('/app/menu', (req, res) => {
               path: '/examine/list',
               component: '@/pages/examine/list',
             },
-            {
-              name: '添加审核',
-              path: '/examine/add',
-              component: '@/pages/examine/add',
-            },
+            // {
+            //   name: '添加审核',
+            //   path: '/examine/add',
+            //   component: '@/pages/examine/add',
+            // },
           ],
         },
         {
@@ -126,11 +126,11 @@ server.post('/app/menu', (req, res) => {
               path: '/information/list',
               component: '@/pages/information/list',
             },
-            {
-              name: '信息添加',
-              path: '/information/add',
-              component: '@/pages/information/add',
-            },
+            // {
+            //   name: '信息添加',
+            //   path: '/information/add',
+            //   component: '@/pages/information/add',
+            // },
           ],
         },
       ],

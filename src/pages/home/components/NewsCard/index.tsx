@@ -1,8 +1,9 @@
 import type Icon from '@ant-design/icons';
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import { Avatar, List, Skeleton, Switch } from 'antd';
+import { Avatar, List, Skeleton, Card } from 'antd';
 import React, { useState } from 'react';
 
+import './index.less';
 interface IconTextProps {
   icon: typeof Icon;
   text: React.ReactNode;
@@ -30,7 +31,9 @@ const IconText: React.FC<IconTextProps> = ({ icon, text }) => (
 const App: React.FC<ChildrenProps> = (props: ChildrenProps) => {
   const listData = props.listData;
   const loading = props.loading;
-  console.log(loading);
+  const openHref = (href: string) => {
+    window.open(href);
+  };
   return (
     <>
       {/* <Switch checked={!loading} onChange={onChange} style={{ marginBottom: 16 }} /> */}
@@ -39,48 +42,18 @@ const App: React.FC<ChildrenProps> = (props: ChildrenProps) => {
         size="large"
         dataSource={listData}
         renderItem={(item) => (
-          <List.Item
-            key={item.title}
-            actions={
-              !loading
-                ? [
-                    <IconText
-                      icon={StarOutlined}
-                      text="156"
-                      key="list-vertical-star-o"
-                    />,
-                    <IconText
-                      icon={LikeOutlined}
-                      text="156"
-                      key="list-vertical-like-o"
-                    />,
-                    <IconText
-                      icon={MessageOutlined}
-                      text="2"
-                      key="list-vertical-message"
-                    />,
-                  ]
-                : undefined
-            }
-            extra={
-              !loading && (
-                <img
-                  width={272}
-                  alt="logo"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+          <Card className="card">
+            <List.Item key={item.title} onClick={() => openHref(item.href)}>
+              <Skeleton loading={loading} active avatar>
+                <List.Item.Meta
+                  // avatar={<Avatar src={item.avatar} />}
+                  title={<a href={item.href}>{item.title}</a>}
+                  description={item.description}
                 />
-              )
-            }
-          >
-            <Skeleton loading={loading} active avatar>
-              <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={<a href={item.href}>{item.title}</a>}
-                description={item.description}
-              />
-              {item.content}
-            </Skeleton>
-          </List.Item>
+                {item.content}
+              </Skeleton>
+            </List.Item>
+          </Card>
         )}
       />
     </>
