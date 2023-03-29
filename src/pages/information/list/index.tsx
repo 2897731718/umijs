@@ -188,14 +188,16 @@ const App: React.FC<PageProps> = () => {
     cancelShowAdd();
   };
   // modal 展示
-  const cancelShowAdd = () => setIsAdd(!isAdd);
+  const cancelShowAdd = () => {
+    setIsAdd(!isAdd);
+  };
 
   const informationEdit = (values: any) => {
     form.setFieldsValue({
       title: values.title,
       content: values.content,
       url: values.url,
-      createTime: values.createTime,
+      // createTime: values.createTime,
     });
     setParent({
       type: 'edit',
@@ -228,7 +230,7 @@ const App: React.FC<PageProps> = () => {
         loading={loading}
       />
       <Modal
-        title="请假申请"
+        title="防疫信息"
         open={isAdd}
         onOk={defineAdd}
         onCancel={cancelShowAdd}

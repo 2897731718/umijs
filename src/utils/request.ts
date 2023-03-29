@@ -50,15 +50,6 @@ const errorHandler = (error: { response: Response }): Response => {
   throw response; //抛出错误，之前这里一直时return response导致接口一直获取不到错误信息。
 };
 
-/*
- * 配置request请求时的默认参数
- */
-const request = extend({
-  timeout,
-  errorHandler, // 默认错误处理
-  // credentials: 'include', // 默认请求是否带上cookie
-});
-
 const getUserToken = (): string => {
   let userToken: string = '';
   if (localStorage.getItem('user_token')) {
@@ -69,6 +60,14 @@ const getUserToken = (): string => {
   return userToken;
 };
 
+/*
+ * 配置request请求时的默认参数
+ */
+const request = extend({
+  timeout,
+  errorHandler, // 默认错误处理
+  // credentials: 'include', // 默认请求是否带上cookie
+});
 // request拦截器, 携带token.
 request.interceptors.request.use((url: string, options: RequestOptionsInit) => {
   // 不携带token的请求数组
@@ -82,7 +81,6 @@ request.interceptors.request.use((url: string, options: RequestOptionsInit) => {
   // 给每个请求带上token
   let headers = {
     // Authorization: getUserToken(),
-    // apikey: 'web-user',
     'Content-Type': 'application/json',
   };
 
@@ -108,18 +106,6 @@ const get = async (url: string, parameter?: any): Promise<any> => {
   }
 };
 
-const deletes = async (
-  url: string,
-  parameter?: Record<string, unknown>,
-): Promise<any> => {
-  try {
-    const res = await request(url, { method: 'delete', ...parameter });
-    return res;
-  } catch (error) {
-    throw error;
-  }
-};
-
 /*post 与 put请求的参数格式：
 {
   data:传往后端的参数，
@@ -132,6 +118,18 @@ const post = async (url: string, args: RequestOptionsInit): Promise<any> => {
       method: 'post',
       ...args,
     });
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deletes = async (
+  url: string,
+  parameter?: Record<string, unknown>,
+): Promise<any> => {
+  try {
+    const res = await request(url, { method: 'delete', ...parameter });
     return res;
   } catch (error) {
     throw error;

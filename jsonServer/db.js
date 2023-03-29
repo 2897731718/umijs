@@ -42,10 +42,32 @@ const homeList = Mock.mock({
 });
 
 const usersList = Mock.mock({
-  [`users|20`]: [
+  [`users`]: [
     {
-      'id|+1': 1,
-      'key|+1': 1,
+      'id|+3': 1,
+      'key|+3': 1,
+      'status|1': ['1', '2'],
+      createTime: '@date("yyyy-MM-dd HH:mm:ss")',
+      name: Random.cname(),
+      age: 20,
+      address: Random.province(),
+      studId: '20191923',
+      classes: '1910',
+    },
+    {
+      'id|+3': 2,
+      'key|+3': 2,
+      'status|1': ['1', '2'],
+      createTime: '@date("yyyy-MM-dd HH:mm:ss")',
+      name: Random.cname(),
+      age: 20,
+      address: Random.province(),
+      studId: '20191923',
+      classes: '1910',
+    },
+    {
+      'id|+3': 3,
+      'key|+3': 3,
       'status|1': ['1', '2'],
       createTime: '@date("yyyy-MM-dd HH:mm:ss")',
       name: Random.cname(),

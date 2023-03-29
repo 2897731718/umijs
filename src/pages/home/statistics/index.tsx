@@ -26,7 +26,7 @@ const App: React.FC = () => {
     <>
       <Row gutter={[10, 20]} justify="center" className="padding-xs">
         <Col span={8}>
-          <Card title="完成进度">
+          <Card title="审核完成进度">
             <RingProgress />
           </Card>
         </Col>
